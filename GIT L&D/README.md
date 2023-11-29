@@ -44,4 +44,62 @@
 * Create the local repository at command line 
 * Then use **git clone** to clone to our local machine.
 
+# Starting to use Git
 
+* A Git command doesn't just pertain to a saving changes in a single file. It can constitute specific changes accross an entire working directory.
+
+* working directory -> Staging area -> Repository -> push 
+
+* Repository ->Working directory(Pull)
+
+* **git commit -m " "**
+
+## Add and Commit
+
+- Syntax : **git add** and check status for **git status** an for commit **git commit**
+
+## Git Log
+
+* it shows all the commits made to the repository
+* a history of repo
+
+## Git remote and push
+
+* we can check remote branch using **git remove-v** 
+* **git remote add name https://url.git** : to add a remote branch using the git remote command syntax.
+
+* **git remote add origin https://url.git** : We call this remote branch the **origin** branch 
+
+* Once we have connected to our remote branch on github, we can **push** our code to the remote branch.
+
+* we tell git to push to the remote main/master branch called origin with the command 
+
+    * git push -u origin main/master
+
+## Fetch and Pull
+Ex                 **add**         **commit**           **Push**
+* working directory ---->staging area-------->Local Repo------------>Remote
+
+ex            **fetch**
+* Remote Repo -------->Local repo(git fetch)
+
+
+# Branches and working with others
+
+* Branches allows us to organize a repository and split it apart so multiple people can work on it or so s solo devloper can work on different aspects of a project on a seperated work.
+* As we need incorporate the workflows of others or be able to focus on new updates without breaking old code, we need **BRANCHES**.
+* They represent an independent line of development.
+* Upon creating new repo with **git init** we create a new branch called **master branch** (or **main branch**).
+
+### Understanding Head
+
+* **Head** has always been pointing to most recent commit in master branch 
+    * **HEAD -> master**
+
+## Merging Branches
+
+* Git will create a commit(Auto commit) for us. It will also request for you to name the commit, with a default name of **"Merge branch branch_name"**
+
+## Git Diff
+
+* **git diff** which displays the differences between the original file and unstaged changes.
