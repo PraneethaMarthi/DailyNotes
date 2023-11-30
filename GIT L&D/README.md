@@ -103,3 +103,30 @@ ex            **fetch**
 ## Git Diff
 
 * **git diff** which displays the differences between the original file and unstaged changes.
+
+# Git checkout 
+ * New git commands were created such as **git switch**
+ * The **git checkout** command can operate on three entities : files,commits,branches.
+ * we could use **git checkout branch_name** instead of **git switch branch_name** to checkout a new branch
+ * we can checkout a particular commit by specifying its hash, from **git Log** as
+    * **git log --oneline** and proviude the hash as **git checkout ########**
+
+## Git restore
+
+* we can restore a file to its state at the most previous most recent commit using
+    * **git restore file_name**
+* **YOU CANNOT UNDO A GIT RESTORE COMMAND, SINCE YOUR CHANGES WERE NOT COMMITTED!.**
+
+## Git Reset
+
+* It allows us to remove commits and "reset" the branch.
+* Two types: 
+    * **git reset #######** : Removes commits in front of specific hash called files unchanged.
+    * **git reset ####### --hard** : removes commits and the changes in files.
+
+## Git Revert :
+
+* **git revert** command will create a new commit that undoes work from previous commits, but keeps those commits in the branch.
+* **git revert** creates a new commit that matches the historical state of previous commit.
+
+
