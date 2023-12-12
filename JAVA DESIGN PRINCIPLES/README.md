@@ -100,6 +100,115 @@ classDiagram
 
 * So, Introducing two new classes validate user and user persistent service solves the issue.
 
+## Open-Closed Principle
 
+ * It states that software entities(classes,modules,methods) should be open for extension and closed for modification.
+  **Open for extension** - Extend existing behaviour.
+  **Closed for modification** - Existing code remains unchanged 
 
+```mermaid
+classDiagram
+    class base{
+                    -----closed for modification(avoid modifying base class)
+    }
+    class derived{
+                    -----Open for extension(can derive from base and override methods)
+    }
+    base <|-- derived
+```
 
+**Example**
+
+```mermaid
+classDiagram
+
+    class PhoneSubscriber{
+        +subscriberId
+        +Address
+        +phonenumber
+        +baserate
+        +CalculateBill(): double
+        +getterandSetter()
+    }
+    class ISPSubscriber{
+        +subscriberId
+        +Address
+        +phonenumber
+        +baserate
+        +freeusage
+        +CalculateBill(): double
+        +getterandSetter()
+    }
+    class CallHistory {
+        +SubscriberId
+    }
+    class InternetSessionHistory{
+        +SubscriberId
+    }
+   PhoneSubscriber --ISPSubscriber
+   PhoneSubscriber *--CallHistory
+   InternetSessionHistory *--ISPSubscriber
+
+```
+From the above example, Duplication will happen to the derived class so introducing inheritance methods will solve the issue.
+
+```mermaid
+classDiagram
+
+    class PhoneSubscriber{
+        @override
+        +calculatebill(): double
+    }
+    class ISPSubscriber{
+        +CalculateBill(): double
+        +getterandSetter-freeusage()
+    }
+    class CallHistory {
+        +SubscriberId
+    }
+    class InternetSessionHistory{
+        +SubscriberId
+    }
+    class Subscriber{
+        +subscriberId
+        +Address
+        +phonenumber
+        +baserate 
+        +getterandsettersubscriberid          
+    }
+    Subscriber<|-- PhoneSubscriber
+    Subscriber<|--ISPSubscriber
+    PhoneSubscriber *--CallHistory
+   InternetSessionHistory*--ISPSubscriber
+
+```
+
+## Liskov Substitution Principle
+
+* We should be able to substitute base class objects with child class objects and this should not alter behaviour/characteristics of program.
+ 
+ ```mermaid
+classDiagram
+
+    class Base{
+        base class object providing specific behaviour 
+    }
+
+    class child{
+
+    }
+    Base <|-- child
+```
+
+```mermaid
+classDiagram
+
+    class Base{
+        if substituted with child class object it should not change its behaviour
+    }
+
+    class child{
+
+    }
+    Base <|-- child
+```
