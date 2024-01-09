@@ -212,3 +212,55 @@ classDiagram
     }
     Base <|-- child
 ```
+
+## Interface Seggregation Principle
+
+* Clients should not be forced to depend upon interfaces that they donot use.
+* **InterfacePollution** 
+    #### Signs of Interface Pollution:
+    - Classes have empty method implementations.
+    - Methods implementations throw UnsupportedOperationException(or similar).
+    - Method implementations return null or default/dummy values.
+ To break those interfaces ISP comes into the picture.
+
+## Dependency Inversion Principle 
+* **A.** High level modules(implements business modules) should not depend upon low level modules(functionality can be used anywhere) but both should depend on abstractions(a simple interface).
+* **B.** Abstractions should not depend upon details. Details should depend upon abstractions.
+
+
+# Design Patterns
+
+```mermaid
+classDiagram
+    class DesignPatterns{
+    }
+    class Creational{
+        - Deals with the process of creation of objects of classes
+    }
+    class Structural{
+         Deals with how ojects and classes are composed and arranged.
+    }
+    class Behavioural{
+        - Describes how classes and objects communicate and interact with each other.
+    }
+    DesignPatterns <|-- Creational
+    DesignPatterns <|-- Structural
+    DesignPatterns <|-- Behavioural
+```
+
+## Creational Design Patterns :
+* Deals with the process of creation of objects of classes
+
+```mermaid
+    flowchart LR
+    Creational --> Builder
+    Creational --> SimpleFactory
+    Creational --> FactoryMethod
+    Creational --> Prototype
+    Creational --> Singleton
+    Creational --> AbstractFactory
+    Creational --> ObjectPool
+```
+
+## Builder 
+
