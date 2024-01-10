@@ -264,3 +264,87 @@ classDiagram
 
 ## Builder 
 
+* **What problem builder design pattern solves?**
+ - Class Constructor requires a lot of information.
+    - It will make it easy to use such constructors 
+    - It will help us avoid writing such constructors in first place.
+**Objects that need other objects or ""parts" to construct them.**
+```mermaid
+classDiagram
+
+    class address{
+    +address()
+    }
+    class user{
+    +User(name,Address address, List<Role> roles) - Need address object, a collection of role object in order to create user object
+    }
+    address <|-- user
+```
+- In such conditions we can use builder 
+- we have to create the address object first and next collection and so on. we have to follow some certain steps and we can use builder here.
+
+* We have a complex process to construct an object involving multiple steps, then builder pattern can help us.
+* In builder we remove the logic related to object construction from "client"" code & abstract it in sperate classes.
+
+## Implement a Builder
+
+ * We start by creating a builder
+    - Identify the **parts** of the product & provide methods to create those parts.
+    - It should provide a method to **assemble** or build the product/object.
+    - It must provide a way/method to get fully built object out. Optionally builder can keep reference to a product it has built so the same can be returned again in future.
+
+* A director can be a seperate class or client can play the role of director.
+
+# Builder- Example UML
+
+```mermaid
+classDiagram
+    class Client{
+        <<director>>
+    }
+    class UserDTOBuilder{
+        <<abstract>>
+    }
+    class UserDTO{
+        <<abstract.product>>
+    }
+    class UserRESTDTO{
+
+    }
+    class UserRESTDTOBuilder{
+        
+    }
+    class UserWebDTOBuilder{
+
+    }
+    class UserWebDTO{
+        <<product>>
+    }
+    UserDTOBuilder <|-- Client
+    UserDTO <|-- UserDTOBuilder
+    UserDTO <|-- UserWebDTO
+    UserWebDTO <|-- UserWebDTOBuilder
+    UserRESTDTO <|-- UserRESTDTOBuilder
+    UserDTOBuilder <-- UserRESTDTOBuilder
+    UserDTOBuilder <-- UserWebDTOBuilder
+```
+### Implementation Considerations
+
+* Can easily create an immutable class by implementing builder as an inner static class. you'll find this type of implementation used quite frequently even if immutability is not a main concern.
+
+### Design Considerations
+
+* The director role is rarely implemented as seperate class, typically the consumer of the object instance or client handles the role.
+* Abstract builder is also not required if product itself is not part of anu inheritance hierarchy. you can directly create concrete builder.
+* If "too many constructor arguments" problem occurs, builder pattern may help and thats an indication to use it.
+
+**Example of a builder pattern**
+
+* The java.lang.StringBuilder class as well as various buffer classes in java.nio package like ByteBuffer, CharBuffer are often given as examples of builder pattern.
+
+* They dont match with 100% with GoF definition.
+
+#### Pitfalls
+
+- A little bit complex for beginners beacuse of method chaining where builder methods return builder object itself.
+- Possibility of partitially initialized object.
