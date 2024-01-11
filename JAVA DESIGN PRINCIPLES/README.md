@@ -348,3 +348,60 @@ classDiagram
 
 - A little bit complex for beginners beacuse of method chaining where builder methods return builder object itself.
 - Possibility of partitially initialized object.
+
+
+## Simple Factory
+
+* What problem simple factory solves?
+    - Multiple types can be instantiated and the choice is based on some simple criteria.
+
+* Here we simply move instantiation logic to a seperate class and most commonly to a static method of this class.
+* Some donot consider simple factory to be a **Design Pattern** as its a simply method that encapsulates object instantiation 
+
+### Implementation steps
+
+* We start by creating a seperate class for our simple factory.
+    - Add a method which returns desired object instance.
+        - This method is typically static and will accept some arguments to decide which class to instantiate.
+        - You can also provide additional arguments which will be used to instantiate objects.
+
+```mermaid
+classDiagram
+    class Client{
+        <<director>>
+    }
+    class SimpleFactory{
+        <<static>>
+        + getProduct(String): Product - Role - SimpleFactory provides static method to get instance of product subclass
+    }
+    class Product{
+        Role Product : Objects of this class & its subclasses are needed.
+    }
+    class ProductA{
+        <<implentationclass>>
+    }
+    class ProductB{
+        <<implentationclass>>
+    }
+    SimpleFactory <|-- Client
+    Product <|-- SimpleFactory
+    Product <-- ProductA
+    Product <-- ProductB
+```
+
+### Implementation Considerations
+
+* SF can be a method in existing class, adding a seperate class however allows other parts of your code to use SF more easily.
+* SF itself dosen't need any state tracking so best to keep it as static method.
+ 
+### Design Considerations
+
+* SF will in turn may use other design pattern like builder to construct objects.
+* In case you want to specialize your SF in sub classes, you need factory method design pattern instead.
+
+#### Example:
+* The java.text.NumberFormat class has getIntsance method, which is example of SF
+
+### Pitfalls
+
+* The criteria used by SF to decide which object to instantiate can get more convoluted/complex over time. If we find ourself in such situation use Factory Method Design Pattern.
