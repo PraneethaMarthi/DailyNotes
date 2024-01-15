@@ -405,3 +405,65 @@ classDiagram
 ### Pitfalls
 
 * The criteria used by SF to decide which object to instantiate can get more convoluted/complex over time. If we find ourself in such situation use Factory Method Design Pattern.
+
+# Factory Method
+
+* We want to move the object creation logic from our code to a seperate class.
+* We use this pattern when we do not know in advance which class we may need to instantiate before hand and also to allow new classes to be added to system and handle their creation without affecting client code.
+* We let subclasses decide which object to instantiate by overriding the factory method.
+
+#### Implementation Steps 
+
+* We start by creating a class for our creator.
+    - Creator itself can be concrete if it can provide a default object or it can be abstract.
+    - Implementations will override the method and return an object.
+
+#### Implementation Considerations
+
+* The creator can be a concrete class and provide a default implementation for the FM. In such cases we will create some **default** object in base creator.
+* Can also use SF way of accepting additional arguments to choose between different object types. Subclasses can then override FM to selectively create different objects for some criteria.
+
+#### Design Considerations
+
+* Creator heirarchy in FM pattern reflects the product hierarchy. We typically end up with a concrete creator per object type.
+* Template Method design pattern often makes use of FMs.
+* Another creational design pattern called **"abstract factory"** makes use of FM pattern.
+
+#### Example of FM.
+* The java.util.Collection(or java.util.AbstractCollection) has an abstract method called iterator(). This method is an example of FM.
+
+### Pitfalls
+
+* More complex to implement. More classes involved and need unit testing.
+* Have to start with FM from the beginning. Its not easy to refactor existing code into FM pattern.
+* Sometimes this pattern focuses to subclass just to create appropriate instance.
+
+### Example UML
+
+```mermaid
+classDiagram
+    class Product{
+        Role Product : base class or interface of products created by FM.
+    }
+    class Creator{
+        Declares the abstract method and additionally uses the FM to create product 
+    }
+    class ConcreteProductB{
+        Implements product interface or class.
+    }
+    class ConcreteProductA{
+        
+    }
+    class ConcreteCreatorB{
+        Implements FM and returns one of concrete product instance.
+    }
+    class ConcreteCreatorA{
+        
+    }
+    Product <|-- ConcreteProductB
+    Product <|-- ConcreteProductA
+    Creator <|-- ConcreteCreatorB
+    Creator <|-- ConcreteCreatorA
+    ConcreteProductA <-- ConcreteCreatorA
+    ConcreteProductB <-- ConcreteCreatorB
+```
