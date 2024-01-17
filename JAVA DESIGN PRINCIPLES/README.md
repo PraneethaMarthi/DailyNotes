@@ -467,3 +467,103 @@ classDiagram
     ConcreteProductA <-- ConcreteCreatorA
     ConcreteProductB <-- ConcreteCreatorB
 ```
+
+# Prototype
+
+* We have a complex object that is costly to create. 
+* To create more instances of such class, we use an existing instance as our prototype
+* Prototype will allow us to make copies of existing object and save us from having to recreate objects from scratch.
+
+### Implement a Prototype
+
+* We start by creating a class which will be a prototype
+    - The class must implement Cloneable interface.
+    - Class should override clone method and return copy of itself.
+    - The method should declare CloneNotSupportedException in throws clause to give subclasses chance to decide on whether to support cloning.
+* Clone method implementation should consider the deep & shallow copy and choose whichever is applicable.
+
+### Implementation Considerations
+
+* Pay attention to the deep copy and shallow copy of references. Immutable fields on clones save the trouble of deep copy.
+* Make sure to reset the mutable state of object before returning the prototype. Its a good idea to implement this in method to allow subclasses to initialize themselves.
+* clone() method is protected in Object class and must be overriden to be public to be callable from outside the class.
+* Cloneable is a **marker**, an indication that the class supports cloning.
+
+### Design Considerations
+
+* Protypes are useful when you have large objects where majority of state is unchanged between instances and you can easily identify that state.
+* A prototype registry is a class where in you can register various prototypes which other code can access to clone out instances. This solves the issue of getting access to initial instance.
+* Prototypes are useful when working with Composite and Decorator Patterns.
+
+### Example of a Prototype
+
+* Actually the Object.clone() method is an example of a prototype!
+* This method is provided by Java and can clone an existing object, thus allowing any object to act as a prototype. Classes still need to be Cloneable but the method does the job of cloning object.
+
+### Pitfalls
+
+* Usability depends upon the number of properties in state that are immutable or can be shallow copied. An object where state is comprised of large number of mutable objects is complicated to clone.
+* In Java the default clone operation will only perform the shallow copy so if you need a deep copy you've implement it.
+* Subclasses may not be able to support clone and so the code becomes complicated as you have to code for situations where an implementation may not support clone.
+
+### Example UML
+
+```mermaid
+classDiagram
+    class Client {
+        Role Client : Creates new instance using prototype's clone method
+    }
+    class Prototype{
+        <<abstract>>
+        + clone(): Prototype
+        Role: declares a method for cloning itself.
+    }
+    class ConcretePrototypeB{
+        + clone(): ConcretePrototypeB
+    }
+    class ConcretePrototypeA{
+        + clone(): ConcretePrototypeA - Implements cloning method.
+    }
+    Prototype <|-- ConcretePrototypeA
+    Prototype <|-- ConcretePrototypeB
+     Prototype <|-- Client
+```
+
+# Abstract Factory
+
+* Abstract factory is used when we have two or more objects which work together forming a kit or set and there can be multiple sets or kits that can be created by client side.
+* So we seperate client code from concrete objects forming such a set and also from the code which creates these sets.
+
+#### Implementation Steps
+
+* We start by studying the product "sets".
+    - Create abstract factory as an abstract class or an interface.
+    - Abstract factory defines abstract methods for creating products.
+    - Provide concrete implementation of factory for each set of products.
+* Abstract factory makes use of factory method pattern. You can think of abstract factory as an object with multiple factory methods.
+
+### Implementations Considerations
+
+* Factories can be implemented as singletons, we typically ever need only one instance of it anyway. But make sure to familiarize yourself with drawbacks of singletons.
+* Adding a new product type requires changes to the base factory as well as all implemntations of factory.
+* We provide the client code with concrete factory so that it can create objects.
+
+### Design Considerations
+
+* When you want to constrain object creations so that they all work together then abstract factory is good design pattern.
+* Abstract factory uses Factory Method Pattern.
+* If objects are expensive to create then you can transparently switch factory impkementations to use prototype design pattern to create objects.
+
+### Example of an AF
+
+* The Javax.xml.parsers.DocumentBuilderFactory is a good example of an abstract factory pattern.
+* The class has a **static** newinstance() method which returns actual factory class object.
+* The newinstance() method however uses classpath scanning, system properties, an external property file as ways to find the factory class & creates the factory object. So we can change the factory class being used, even if this is a static method.
+
+### Pitfalls
+
+* A lot more complex to implement than Factory method.
+* Adding a new product requires changes to base factory as well as ALL implementations of factory.
+* Difficult to visualize the need at start of development and usually starts out as a factory method.
+* Abstract factory design pattern is very specific to the problem of "product families".
+
