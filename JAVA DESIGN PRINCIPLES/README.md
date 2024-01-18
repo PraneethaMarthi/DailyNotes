@@ -567,3 +567,51 @@ classDiagram
 * Difficult to visualize the need at start of development and usually starts out as a factory method.
 * Abstract factory design pattern is very specific to the problem of "product families".
 
+ # Singleton
+
+ * A singleton class has only one instance, accessible globally through a single point 
+ * Main problem this pattern solves is to ensure that only a single instance of this class exists.
+ * Any state you add in singleton becomes part of "global state" of your application.
+
+ # Implement a singleton
+
+ * Two options for implementing a singleton
+    - Early Initialization - Eager Singleton
+        * Creates singleton as soon as class is loaded.
+    - Lazy Initialization - Lazy Singleton
+        * Singleton is created when it is first required.
+
+### Implementation Considerations
+* Early or Eager Initialization is the simplest and preferred way. Always try to use the approach first.
+* The classic singleton pattern implementation uses double check locking and volatile field.
+* The lazy initialization holder idiom provides best of both worlds, dont deal with synchronization issues directly and is easy to implement.
+* You can also implement singletons using enums.
+
+### Design considerations
+
+* singleton creation does not need any parameters. If in need of support for constructor arguments, you need a simple factory or factory method instead.
+* Make sure that your singletons are not carrying a lot of mutable global state.
+
+**Example** - The Java.lang.Runtime class in standard Java API is a singleton.
+
+# Pitfalls
+* Singleton pattern can deceive you about true dependencies, Since they are globally accessible its easy to miss dependencies.
+* They are hard to unit test, cannot easily mock instance that is returned
+* Common way to implement singletons in Java is through static variables and they are held per class loader and not per JVM. So they may not be truly singleton in an OSGi or web application.
+* A Singleton carrying around a large mutable global state is a good indication of an abused Singleton Pattern.
+
+
+### Example UML
+
+```mermaid
+classDiagram
+    class Singleton {
+        Role Client : Responsible for creating unique instance and provides static method to get the instance.
+        -Instance : Singleton(readOnly)
+        +getInstance(): Singleton
+        +Operation1():void
+        +operation():void
+    }
+```
+
+
