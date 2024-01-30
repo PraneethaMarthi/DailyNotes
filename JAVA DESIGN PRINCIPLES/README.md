@@ -678,3 +678,174 @@ classDiagram
     ConcreteReusable < .. ObjectPool 
     AbstractReusable < .. Client
 ```
+# Adapter
+
+* We have an existing object which provides the functinality that client needs. But client code can't use this object because it expects an object with different inheritance.
+* Using adapter design pattern we make this existing object work with client by adapting the object to client's expected interface.
+
+```mermaid
+classDiagram
+    class Client{
+        Role - Needs functionality provided but as different interface than adaptee
+    }
+    class Target{
+        + operation()
+        Role - interface expected by client
+    }
+    class Adaptee{
+        + myOperation(): void
+        Role - our existing class providing needed functinality 
+    }
+    class ObjectAdapter{
+        + operation(): void
+        Role - Adapts existing functionality. 
+    }
+    Target <.. Client
+    ObjectAdapter --o Adaptee
+    Target < .. ObjectAdapter
+```
+
+### Implementation Steps
+
+* We start by creating a class for Adapter
+    - Adapter must implement the interface expected by client.
+    - First we are going to try out a class adapter by also extending from our existing class.
+* An Object adapter should take adaptee as an argument in constructor or as a less preferred solution
+
+### Implementation Considerations
+
+* Using class adapter allows you to override some of the adaptee's behaviour 
+* using Object adapter allows you to potentially change the adaptee object to one of its subclasses.
+
+### Design Considerations
+
+* A class adapter is also called as a two way adapter, since it can stand in for both the target interface and for the adaptee.
+* That is we can use object of adapter, where either target interface is expected as well as where an adaptee object is expected.
+
+### Example
+
+* The java.io.InputStreamReader and java.io.OutputStreamWriter classes are examples of object adapters.
+
+
+# Bridge
+
+* Our implementations and abstarctions are generally coupled to each other in normal inheritance.
+* Using bridge pattern we can decouple them so they can booth change without affecting each other
+* We achieve this feat by creating two seperate inheritance hierarchies; one for implementation and another for abstraction.
+* We use composition to bridge these two hierarchies.
+
+### Example UML
+
+```mermaid
+classDiagram
+    class Client{
+        
+    }
+    class Abstraction{
+        + operation(): void
+        Role : defines abstractions interface and has reference to implementor.
+    }
+    class Implementor{
+        Base interface for implementation classes and methods are unrelated to Abstarction & typically represent smaller steps needed.
+        + step1(): void
+        + step2(): void 
+    }
+    class ConcreteImplementorB{
+        + step1(): void
+        + step2(): void
+        Role : implements implementor methods 
+    }
+    class ConcreteImplementorA{
+        + step1(): void
+        + step2(): void 
+        Role : implements implementor methods 
+    }
+    class RefinedAbstraction{
+        More Specified abstraction
+    }
+    Abstraction <.. Client
+    Implementor ..o Abstraction
+    Abstraction <|-- RefinedAbstraction
+    Implementor <|-- ConcreteImplementorB
+    Implementor <|-- ConcreteImplementorA
+    
+```
+### Implementation Steps
+
+* We start by defining our abstraction as needed by client 
+    - We determine common base operations and define them in abstraction
+    - We can optionally also define a refined abstraction and provide more specialized operations
+* Abstractions are created by composition them with an instance of concrete implementor which is used by methods methods in abstraction
+
+### Implementation Considerations
+
+* if in a single Implementation then we can skip creating abstract implementor
+* abstraction can decide on its own which concrete implemtor to use in its constructor or we can delegate that decision to a third  class. In last approach abstraction remains unaware of concrete implementors and provides greater de-coupling.
+
+### Design Considerations
+
+* Bridge provides great extensibility by allowing us to change abstraction and implementor independently you can build and package them seperately to modularize overall system.
+
+### Example
+
+Collections.newSetFromMap() method. Returns set which backed by given map object.
+
+### Pitfalls
+
+* It is fairly complex to understand and implement bridge design pattern.
+* Needs to be designed up front. Adding bridge to legacy code is difficult.
+
+# Decorator
+
+* When we want to enhance behaviour of our existing object dynamically as and when required then we can use decorator design pattern
+
+* Decorator wraps an object within itself and provides same interface as the wrapped object. so the client of original object doesn't need to change.
+
+* A decorator provides alternative to subclassing for extending functionality of existing classes.
+
+### Example UML
+
+```mermaid
+classDiagram
+    class Component{
+        + operation(): void
+        Defines interface used by client.
+    }
+    class ConcreteComponent{
+        + operation(): void
+        Role : Plain object which can be decorated.
+    }
+    class Decorator{
+       Provides additional behaviour and maintains reference to component.
+        + operation(): void
+        + addedBehaviour(): Void
+    }
+   Component <|-- ConcreteComponent
+   Component <|-- Decorator
+   Decorator ..o Component
+      
+```
+### Implement a Decorator
+
+* We start with out our component.
+    - Component defines interface needed or already used by client.
+    - Concrete component implements the copmponent
+    - We define our decorator. Decorator implements component and also needs reference to concrete component 
+
+### Implementation Considerations
+
+* Since we have decoratorsand concrete classes extending from common component, avoid large state in this base class as decorators may not need all that state.
+
+### Design Considerations
+
+* Decorators are more flexible and powerful than inheritance
+* Inheritance is static by definition but decorators allow you to dynamically compose behaviour using objects at runtime.
+
+### Example
+
+* Classes in Java's I/O Package are great examples of decorator pattern.
+* java.io.BufferOutputStream class decorates any java.io.OutputStream object and adds buffering to file writing operation.
+
+# Pitfalls
+
+* Often results in large number of classes being added to system, where each class adds a small amount of functionality. You often end up with lots of objects, one nested inside another and so on.
