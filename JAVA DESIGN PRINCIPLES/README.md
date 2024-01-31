@@ -678,6 +678,8 @@ classDiagram
     ConcreteReusable < .. ObjectPool 
     AbstractReusable < .. Client
 ```
+# Structural Design Patterns 
+
 # Adapter
 
 * We have an existing object which provides the functinality that client needs. But client code can't use this object because it expects an object with different inheritance.
@@ -846,6 +848,66 @@ classDiagram
 * Classes in Java's I/O Package are great examples of decorator pattern.
 * java.io.BufferOutputStream class decorates any java.io.OutputStream object and adds buffering to file writing operation.
 
-# Pitfalls
+### Pitfalls
 
 * Often results in large number of classes being added to system, where each class adds a small amount of functionality. You often end up with lots of objects, one nested inside another and so on.
+
+# Composite
+
+* We have a part-whole relationship or hierarchy of objects and we want to be able to treat all objects in this hierarchy uniformly.
+* This is NOT a simple composition concept from oop but a further enhancement to that principal.
+
+
+### Example UML
+
+```mermaid
+classDiagram
+    class Client{
+        
+    }
+    class Component{
+        + operation(): void
+        + add(component): void
+        + remove(Component): void
+        Role : defines behaviour coomon to all classes including methods to access child
+    }
+    class Composite{
+        Stores child components 
+        + operation(): void
+        + add(component): void
+        + remove(Component): void
+    }
+    class Leaf{
+         + operation(): void
+         Represents leaf objects and behaviour of primitive objects
+    }
+    Component <.. Client
+    Component ..o Composite
+    Component <|-- Composite
+    Component  <|-- Leaf
+    
+```
+### Implementation steps
+
+* We start by creating an abstract class or interface for component.
+    - Component must declare all methods that are applicable to both leaf and composite.
+    - We have to choose who defines the children management operations, component or composite.
+* In the end a composite pattern implementation will allow to rite algos w/o worrying about whether node is a leaf or composite.
+
+### Implementation Considerations
+
+* Can provide a method to access parent of a node. This will simplify traversal of the entire tree.
+* You can define the collection field to maintain children in base component instead of composite but again that field has no use in leaf class.
+
+### Design considerations
+
+* Decision needs to be made about where child management operations are defined.
+* Defining them on component provides transparency but leaf nodes are forced to implement those methods.
+
+### Example
+
+* Composite is used in many UI frameworks, since it easily allows to represent a tree of UI controls.
+* In JSF we have UIViewRoot class which acts as composite. Other UIComponent implementations like UIOutput, UIMessage act as leaf nodes.
+
+### Pitfalls
+* Difficult to restrict what is added to hierarchy. If multiple types of leaf nodes are present in system then client ends up doing runtime checks to ensure the operation is available on a node.
