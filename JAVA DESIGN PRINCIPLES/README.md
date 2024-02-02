@@ -911,3 +911,54 @@ classDiagram
 
 ### Pitfalls
 * Difficult to restrict what is added to hierarchy. If multiple types of leaf nodes are present in system then client ends up doing runtime checks to ensure the operation is available on a node.
+
+# Facade
+
+* Client has to interact with a large number of interfaces and classes in a subsystem to get result. So client gets tightly occupied coupled with those interface and classes. Facade solves this problem.
+* Facade provides a simple and unified interface to a subsystem, Client interacts with just the facade now to get same result.
+* Facade is NOT just a one to one method forwarding to other classes.
+
+### Example UML
+
+```mermaid
+classDiagram
+    class Facade{
+        + operation(): void
+        Interacts with subsystem classes to satisfy client request
+    }
+    class Subsystem{
+        + Pacakage1
+        + Pacakage2
+        + Pacakage3
+    }
+   Facade --|> Subsystem
+      
+```
+
+### Implementation steps
+
+* We start by creating a class that will serve as a facade
+    - We determine the overall "use cases"/tasks that the subsystem is used for
+    * We write a method that exposes each "usecase" or task.
+    * This method takes care of working with different classes of subsystem.
+
+### Implementation Considerations
+
+* A Facade should minimize the complexity of subsystem and provide usable interface.
+* A Facade is not replacement for regular usage of classes in subsystem.
+
+### Design Considerations
+
+* Facade is a great solution to simplify dependencies. It allows you to have a weak coupling between subsystems.
+
+#### Example
+* The java.net.URL cclass is an example of facade. It provides a simple method called as openStream() and we get an input stream to the resource pointed at by the URL object.
+
+#### Pitfalls
+
+* Not a pitfall of pattern itself but needing a facade in a new design shoould warrant another look at API design
+* It is ofthen overused or misused pattern and can hide improperly designed API.
+
+# Flyweight
+
+* 
