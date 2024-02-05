@@ -961,4 +961,96 @@ classDiagram
 
 # Flyweight
 
-* 
+* Our system needs a large number of objects of a particular class and maintaining these instances is a performance concern.
+* Flyweight allows us to share an object in multiple contexts. Instead of sharing entire object divide object state in two parts : (In every context) and (Context specific). Create only in intrinsic state and share them in multiple contexts.
+* Client or user object provides the extrinsic state to object to carry out its functionality.
+
+### Example UML
+
+```mermaid
+classDiagram
+    class FlywieghtFactory{
+        + getFlyweight(key): Flyweight
+        Provides instances of flyweights and takes cares of sharing.
+    }
+    class Flyweight{
+        + operation(extrinsicState): void
+        interface for flyweight and method to recieve extrinsic state.
+    }
+    class Client{
+       Computes or stores extrinsic state of used flyweights
+    }
+    class ConcreteFlyweight{
+        - intrinsic State
+         + operation(extrinsicState): void
+         Has only intrinsic state and implements methods and uses provides extrinsic state.
+    }
+    class UnsharedConcreteFlyweight{
+        - allState
+         + operation(extrinsicState): void
+         Objects of these are NOT shared.
+    }
+    FlywieghtFactory o.. Flyweight
+    Client ..> FlywieghtFactory
+     Client ..> ConcreteFlyweight
+      Client ..> UnsharedConcreteFlyweight
+   Flyweight <|-- ConcreteFlyweight
+    Flyweight  <|-- UnsharedConcreteFlyweight
+    
+```
+
+#### Example
+* Java uses flyweight pattern for Wrapper classes like java.lang.Integer, Short, Byte etc. Here valueOf static method serves as the factory method.
+* string pool which is maintained by JVM is also an example. 
+
+### Pitfalls
+* Runtime cost may be added for maintaining extrinsic state.
+* Client code has to either maintain it or compute it every time it needs to use flyweight.
+* It is often difficult to find perfect candidate objects for flyweight. Graphical applications benefit heavily from this pattern however a typical web application may not have a lot of use for this pattern.
+
+# Proxy
+
+* We need to provide a placeholder or suurogate to another object.
+* Proxy acts on behalf of the object and is used for lots of reasons
+    - Protection Proxy - Control access to original object's operations
+    - Remote Proxy - Provides a local representation of a remote object
+    - Virtual proxy - Delays construction of original object until absolutely necessary.
+
+### Example UML
+
+```mermaid
+classDiagram
+    class Client{
+       Provides real implementation of subject.
+    }
+    class Subject{
+        <<interface>>
+        + operation(): void
+        Defines Interface used by client.
+    }
+    class RealSubject{
+        + operation(): void
+        Provides real implementation of subject
+    }
+    
+    class Proxy{
+         + operation(): void
+        implements same interface as real subject.
+        Maintains reference to real object for providing actual functionality.
+    }
+    Client ..> Subject
+   Subject <|-- RealSubject
+    Subject <|-- Proxy
+    RealSubject <|-- Proxy
+    
+```
+
+### Example
+
+* Can Find numerous Examples
+* Hibernate uses a proxy to load collections of value types.
+* Spring uses proxy pattern to provide support for features like transactions.
+* Hibernate and spring both can create proxies for classes which do not implement any interface.
+
+#### Pitfalls
+* If you need proxies for handling multiple responsibilities like auditing, authentication, as a stand-in for the same instance, then its better to have a single proxy to handle all these requirements. Due to the way some proxies create object on their own.
