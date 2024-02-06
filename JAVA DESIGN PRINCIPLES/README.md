@@ -1054,3 +1054,47 @@ classDiagram
 
 #### Pitfalls
 * If you need proxies for handling multiple responsibilities like auditing, authentication, as a stand-in for the same instance, then its better to have a single proxy to handle all these requirements. Due to the way some proxies create object on their own.
+
+# Behavioral Patterns
+* Describes how classes and objects interact and communicate with each other
+
+# Chain of Responsibility
+
+* We need to avoid coupling the code which sends request to the code which handles that request 
+* Typically the code which wants some request handled calls the exact method on an exact object to process it, thus the tight coupling. Chain of Responsibility solves this problem by giving more than one object, chance to process the request.
+* We create objects which are chained together by one object knowing reference of object which is nect in chain. We give request to first object in chain, If it cant handle that it simply passes the request down the chain.
+
+### Example UML
+
+```mermaid
+classDiagram
+    class Client{
+       Hands over request to first object in chain.
+    }
+    class Handler{
+        + handleRequest(): void
+        Defines interface for handling request
+        and implements link to successor.
+    }
+    class ConcreteHandlerA{
+        + handleRequest(): void
+        Provides real implementation of subject
+    }
+    
+    class ConcreteHandlerB{
+          + handleRequest(): void
+        Handles Requests if it can, if not it passes to successor
+    }
+    Client ..> Handler
+    Handler --|> Handler
+   Handler <|-- ConcreteHandlerB
+    Handler <|-- ConcreteHandlerA
+    
+```
+
+#### Example 
+* Servlet Filters is the best example. Each filter gets a chance to handle incoming request and passes it down the chain once its work is done.
+* All servlet filters implement javax.servlet.Filter interface 
+
+### Pitfalls
+* There is no guarantee provided in the pattern that a request will be handled. Request can traverse whole chain and fall off at the other end without ever being processed and we wont know it 
