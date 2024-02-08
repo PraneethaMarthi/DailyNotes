@@ -1098,3 +1098,53 @@ classDiagram
 
 ### Pitfalls
 * There is no guarantee provided in the pattern that a request will be handled. Request can traverse whole chain and fall off at the other end without ever being processed and we wont know it 
+
+# Command
+
+* We want to represent a request or a method call as an object. Information about parameters passed and the actual operation is encapsulated in a object called command.
+* Advantage of command pattern is that, what would have been a method call is now an object which can be stored for later execution or sent to other parts of code.
+* We can now even queue our command objects and execute them later.
+
+### Example UML
+
+```mermaid
+classDiagram
+    class Client{
+       Creates concrete command and sets its receiver
+    }
+    class Invoker{
+       Actuallu executes command
+    }
+    class Command{
+        <<abstract>>
+        + execute(): void
+        Defines interface for executing an operation.
+    }
+    class ConcreteCommand{
+        - state
+        + execute(): void
+        Binding beteween receiver and action, implements execute using receiver
+    }
+    
+    class Receiver{
+          + operation(): void
+        Actually performs operation described in request.
+        Basically has a method invoked by command.
+    }
+    Client --|> Receiver
+    Client ..> ConcreteCommand
+    ConcreteCommand --|> Receiver
+   ConcreteCommand --|> Command
+    Invoker o.. Command
+    
+```
+
+#### Example
+
+* The java.lang.Runnable interface represents the Command Pattern.
+* The Action class in struts framework is also an example of Command Pattern.
+
+#### Pitfalls
+
+* Things get a bit controversial when it comes to returning values and error handling with Command.
+* Error handling is difficult to implement without coupling the command with the client. In cases where client needs to know a return value of execution its the same situation.
