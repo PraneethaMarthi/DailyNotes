@@ -1148,3 +1148,55 @@ classDiagram
 
 * Things get a bit controversial when it comes to returning values and error handling with Command.
 * Error handling is difficult to implement without coupling the command with the client. In cases where client needs to know a return value of execution its the same situation.
+
+# Interpreter
+
+* we use interpreter when want to process a simple "language" with rules or grammer
+
+    - Example : File access requires user role and admin role.
+* Interpreter allows us to represent the rules of language or grammer in a data structure and then interpret sentences in that language.
+* Each class in this pattern represents a rule in the language. Classes also provides a method to interpret an expression.
+
+### UML
+
+
+```mermaid
+classDiagram
+    class Context{
+        Holds global information needed by interpreter.
+    }
+    class Client{
+       Calls interpret operation and builds a syntax tree optionally
+    }
+    class AbstractExpression{
+       + interpret(context)
+       Interface for expressions in tree, defines interpret operation
+    }
+    class TerminalExpresssion{
+       + interpret(context)
+        Leaf nodes, implements interpret operation
+    }
+    
+    class NonTerminalExpresssion{
+        + interpret(context)
+        Contains other expressions
+    }
+    Client --> AbstractExpression
+     Client --> Context
+    TerminalExpresssion --|> AbstractExpression
+   NonTerminalExpresssion --|> AbstractExpression
+    NonTerminalExpresssion o..AbstractExpression
+    
+```
+
+#### Example
+
+* java.util.regex.Pattern class is an example of Interpreter Pattern 
+* Pattern instance is created with an internal abstract syntax tree, representing the grammar rules, during the static method call compile(). After that we check a sentence against this grammar using Matcher.
+
+#### Pitfalls
+* Class per rule can quickly result in large number of classes, even for moderately complex grammar.
+* Not really suitable for languages with complex grammar rules.
+* This design pattern is very specific to a particular kind od problem of interpreting language.
+
+
