@@ -1199,4 +1199,81 @@ classDiagram
 * Not really suitable for languages with complex grammar rules.
 * This design pattern is very specific to a particular kind od problem of interpreting language.
 
+# Mediator
 
+* Mediator encapsulates how a set of objects interacts with each other. Due to this encapsulation there is a loose coupling between the interacting objects.
+* Typically an object explicitly knows about other object to which it wants to interact i.e, to call a method. 
+
+### UML
+
+```mermaid
+classDiagram
+    class Mediator{
+        + colleagueChanged(colleague)
+        - Defines interface for interacting with colleague objects.
+    }
+    class Colleague{
+        + changed() (changed mediator.colleagueChanged(this))
+        - Knows about mediator and communicates with mediator.
+    }
+    class ConcreteMediator{
+       + colleagueChanged(colleague)
+       - Implements mediator and maintains references to colleague objects 
+    }
+    class ConcreteColleagueA{
+       + setValue(val)
+        implements functionality handles notifications from mediator.
+    }
+    
+    class ConcreteColleagueB{
+        + interpret(context)
+        Contains other expressions
+    }
+    Mediator <|-- Colleague : #mediator
+     ConcreteMediator --> Mediator : dependancy
+    ConcreteMediator --|> ConcreteColleagueA
+  ConcreteMediator --|> ConcreteColleagueB
+    ConcreteColleagueA --> Colleague : Association 
+     ConcreteColleagueB --> Colleague : Association 
+    
+```
+
+# Iterator
+
+* Iterator allows a way to access elements/children of an aggregate object in sequence while hiding the actual internal data structure used.
+* In Java, iterators are integral part of collection frameworks and they are implementations of this design pattern.
+* Iterators are stateful meaning an iterator object remembers its psoition while iterating.
+
+### UML
+
+```mermaid
+classDiagram
+    class Aggregate{
+        + createIterator()
+        - Defines interface to create iterator.
+    }
+    class Client{
+
+    }
+    class Iterator{
+        + next()
+        + hasNext()
+        - Interaface to iterate elements of aggregate.
+    }
+    class ConcreteAggregate{
+       + createIterator()
+       - Implements method to return object of iterator. 
+    }
+    class ConcreteIterator{
+       + next()
+        + hasNext()
+        implements iterator interface and has state to remember position.
+    }
+    Aggregate <-- Client 
+    Client --> Iterator
+     ConcreteIterator --> Iterator : dependancy
+    ConcreteIterator --|> ConcreteAggregate
+  ConcreteAggregate --> ConcreteIterator
+     ConcreteAggregate --> Aggregate : Association 
+    
+```
